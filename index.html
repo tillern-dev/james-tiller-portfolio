@@ -28,6 +28,29 @@ footer{border-top:1px solid #363027;color:#a9a195;padding:26px 0;font-size:.88re
 @media(max-width:850px){.hero{grid-template-columns:1fr;min-height:0;padding-top:55px}.orb{max-width:210px;grid-row:1}.grid{grid-template-columns:repeat(2,1fr)}.about{grid-template-columns:1fr}}
 @media(max-width:600px){#menu{display:block;background:none;color:var(--gold);padding:6px 12px}.links{display:none;position:absolute;top:74px;left:16px;right:16px;background:#1b1917;border:1px solid #67522d;border-radius:12px;padding:20px;flex-direction:column;align-items:stretch}.links.open{display:flex}.grid{grid-template-columns:1fr}.contact{display:block;padding:25px}section.block{padding:65px 0}.hero h1{font-size:clamp(2.7rem,10vw,4.2rem)}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none}}
+/* App-style section navigation */
+html{scroll-behavior:auto}
+body{min-height:100dvh;overflow-x:hidden}
+main{height:calc(100dvh - 77px);min-height:460px;overflow:hidden}
+main>section{display:none!important;height:100%;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#8a6a31 transparent;animation:panelIn .3s ease both}
+main>section.active{display:block!important}
+main>section.hero.active{display:grid!important}
+main>section.block{padding:28px 0}
+main>section.block>.wrap{min-height:100%;display:flex;flex-direction:column;justify-content:center}
+main>section#projects>.wrap{justify-content:flex-start}
+main>section#projects .grid{margin-top:16px}
+main>section#projects .project{min-height:170px;padding:18px}
+main>section#projects .project p{margin:4px 0 8px}
+main>section.hero{padding-top:28px;padding-bottom:30px;min-height:0}
+.reveal{opacity:1!important;transform:none!important}
+nav .links a[aria-current="page"]{color:var(--gold);font-weight:800}
+footer{display:none}
+.app-footer{font-size:.75rem;color:#948a79;margin-top:15px}
+@keyframes panelIn{from{opacity:.1;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:850px){main>section.hero.active{display:flex!important;flex-direction:column-reverse;justify-content:center;gap:15px}main>section.hero .orb{max-width:135px;flex-shrink:0}main>section.hero .orb strong{font-size:3rem}main>section.hero .orb:before{inset:12px}main>section.hero h1{font-size:clamp(2.5rem,7vw,4.5rem)}}
+@media(max-width:600px){main{height:calc(100dvh - 76px);min-height:320px}main>section.block{padding:22px 0}main>section.hero{padding:12px 24px 24px}main>section.hero.active{justify-content:flex-start;gap:10px}main>section.hero .orb{max-width:100px}main>section.hero h1{font-size:clamp(2.2rem,10vw,3.8rem);margin:10px 0}main>section.hero .lead{font-size:1rem}main>section#projects .grid{grid-template-columns:1fr}main>section#projects .project{min-height:155px}}
+@media(max-height:600px){main>section.hero .orb{max-width:85px}main>section.hero h1{font-size:2.8rem}main>section.hero{overflow-y:auto}main>section.block>.wrap{justify-content:flex-start}}
+@media(prefers-reduced-motion:reduce){main>section{animation:none}}
 </style></head>
 <body><header><nav class="wrap"><a class="logo" href="#home">JT<b>.</b> / TILLERN</a><button id="menu" aria-label="Toggle navigation" aria-expanded="false">Menu ☰</button><div class="links" id="links"><a href="#about">About</a><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#contact">Contact</a><a href="https://github.com/tillern-dev" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></nav></header>
 <main>
@@ -45,4 +68,24 @@ footer{border-top:1px solid #363027;color:#a9a195;padding:26px 0;font-size:.88re
 <section id="contact" class="block"><div class="wrap reveal"><div class="contact"><div><div class="eyebrow">04 / Let's connect</div><h2>Have an idea? <span class="gold">Let's build.</span></h2><p>Reach out for collaborations, websites and digital projects.</p></div><div class="actions"><a class="btn" href="mailto:jatillerjames@gmail.com?subject=Portfolio%20Inquiry">Email me ↗</a><a class="btn alt" href="https://github.com/tillern-dev" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></div></div></section>
 </main><footer><div class="wrap footer"><span>© <span id="year"></span> James Tiller Munyerere · Building Ideas Into Digital Reality.</span><span><a href="https://github.com/tillern-dev" target="_blank" rel="noopener noreferrer">GitHub</a><a href="#home">Back to top ↑</a></span></div></footer>
 <script>document.getElementById("year").textContent=new Date().getFullYear();const menu=document.getElementById("menu"),links=document.getElementById("links");menu.addEventListener("click",()=>{let o=links.classList.toggle("open");menu.setAttribute("aria-expanded",String(o))});links.querySelectorAll("a").forEach(a=>a.addEventListener("click",()=>{links.classList.remove("open");menu.setAttribute("aria-expanded","false")}));if("IntersectionObserver" in window){const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("show");o.unobserve(e.target)}}),{threshold:.05});document.querySelectorAll(".reveal").forEach(e=>o.observe(e))}else document.querySelectorAll(".reveal").forEach(e=>e.classList.add("show"));</script>
-</body></html>
+<script>
+(function(){
+ const ids=["home","about","projects","skills","contact"];
+ const panels=ids.map(id=>document.getElementById(id));
+ const nav=document.getElementById("links");
+ const menu=document.getElementById("menu");
+ function show(id,push){
+  if(!ids.includes(id)) id="home";
+  panels.forEach(p=>{const yes=p.id===id;p.classList.toggle("active",yes);p.setAttribute("aria-hidden",String(!yes));if(yes)p.scrollTop=0});
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{if(ids.includes(a.getAttribute("href").slice(1))){if(a.getAttribute("href")==="#"+id)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")}});
+  nav.classList.remove("open");menu.setAttribute("aria-expanded","false");
+  if(push&&location.hash!=="#"+id)history.pushState(null,"","#"+id);
+  document.title=(id==="home"?"James Tiller Munyerere":id.charAt(0).toUpperCase()+id.slice(1)+" | James Tiller Munyerere")+" · TILLERN LABS";
+ }
+ document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener("click",e=>{const id=a.getAttribute("href").slice(1);if(ids.includes(id)){e.preventDefault();show(id,true)}}));
+ window.addEventListener("popstate",()=>show(location.hash.slice(1),false));
+ window.addEventListener("hashchange",()=>show(location.hash.slice(1),false));
+ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&nav.classList.contains("open")){nav.classList.remove("open");menu.setAttribute("aria-expanded","false")}});
+ show(location.hash.slice(1),false);
+})();
+</script></body></html>
